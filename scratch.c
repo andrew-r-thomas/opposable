@@ -45,7 +45,7 @@ void print_hex(uint8_t* bytes, uint64_t len)
 
 int main()
 {
-	uint8_t message[] = "this will be a test of a message that doesn't fit in a single 512 bit chunk";
+	uint8_t message[] = "howdy, im andrew, and this is a long message that will take more than one block";
 	uint64_t message_bits = (sizeof(message) - 1) * 8;
 
 	uint64_t message_block_bytes = get_message_block_bytes(message_bits);
@@ -53,19 +53,13 @@ int main()
 
 	prepare(message, message_bits, message_block, message_block_bytes);
 
-	printf("message bits: %llu\n\n", message_bits);
-	printf("message block bytes: %llu\n\n", message_block_bytes);
-	printf("message block:\n");
-	print_bytes(message_block, message_block_bytes);
-	printf("\n\n");
-
 	uint32_t message_schedule[64] = {0};
 	uint8_t out[32] = {0};
-	hash(message_schedule, message_block, message_block_bytes / 64, out);
-	printf("message schedule:\n");
-	print_words(message_schedule, 64);
-	printf("\n\n");
+	uint8_t message_chunks = message_block_bytes / 64;
+	printf("message chunks: %d\n", message_chunks);
+	hash(message_schedule, message_block,message_chunks, out);
 
-	printf("hash:\n");
+	printf("hash: ");
 	print_hex(out, 32);
+	printf("\n");
 }
