@@ -1,13 +1,11 @@
 /*
 	 TODO:
-	 - handle message blocks larger than one 512 bit chunk
 	 - figure out libc stuff like stdint and memcpy etc
 	 - add function to tell how much mem will be needed for whole hash,
 	   then allocate everything you will need all at start (on stack)
 */
 
 #include <stdint.h>
-#include <stdio.h>
 
 const uint32_t K[64] = {
 	0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5,
@@ -62,8 +60,6 @@ void prepare(uint8_t* message, uint64_t message_bits, uint8_t* message_block, ui
 	}
 }
 
-// message_schedule is 64 32 bit ints
-// TODO: for now we are assuming message_block is exactly 512 bits
 void hash(uint32_t* message_schedule, uint8_t* message_block, uint8_t message_block_chunks, uint8_t* out)
 {
 	uint32_t h[8];
